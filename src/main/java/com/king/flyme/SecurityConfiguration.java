@@ -17,7 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Configuration
 @ComponentScan
@@ -70,7 +68,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //@formatter:off
         http.authorizeRequests()
-                .antMatchers("/", "/hello", "/home","/add/account","/log_in","/index").permitAll()
+                .antMatchers("/", "/hello", "/home","/add/account","/index").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .loginPage("/login")
@@ -100,7 +98,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override
         public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
             // 获取用户信息
-            Account account = accountService.findAccountByEmail(username);
+            Account account = accountService.findUserByAccount(username);
             if (account == null) {
                 throw new UsernameNotFoundException("username not found.");
             }

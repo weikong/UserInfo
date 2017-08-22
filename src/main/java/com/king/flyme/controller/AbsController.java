@@ -12,6 +12,8 @@ public abstract class AbsController {
     }
 
     public ResponseEntity ajax(Object data) {
+        if (data != null && data instanceof Exception)
+            return ajax(-1, ((Exception)data).getMessage(), null);
         return ajax(0, null, data);
     }
 

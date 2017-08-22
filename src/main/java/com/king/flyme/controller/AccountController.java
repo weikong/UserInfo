@@ -40,28 +40,12 @@ public class AccountController extends AbsController {
         }
     }
 
-    @PostMapping
-    @ResponseBody
-    public Object addAccount(@RequestBody String body) {
-        try {
-            JSONObject object = JSONObject.parseObject(body);
-            accountService.addAccount(object);
-            return ajax();
-        } catch (RuntimeException e) {
-            log.error(e.getMessage());
-            return ajax(e);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ajax(e);
-        }
-    }
-
     @GetMapping("add/account")
     @ResponseBody
     public Object addAccount(@RequestParam Map param) {
         try {
             accountService.addAccount(param);
-            return ajax();
+            return "home";
         } catch (RuntimeException e) {
             log.error(e.getMessage());
             return ajax(e);
