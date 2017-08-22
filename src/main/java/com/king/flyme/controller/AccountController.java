@@ -27,6 +27,19 @@ public class AccountController extends AbsController {
         return "index";
     }
 
+    @GetMapping("/login")
+    public String login(@RequestParam Map param) {
+        try {
+            return "login";
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            return "RuntimeException";
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "Exception";
+        }
+    }
+
     @PostMapping
     @ResponseBody
     public Object addAccount(@RequestBody String body) {
