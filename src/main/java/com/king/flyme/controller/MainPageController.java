@@ -25,6 +25,19 @@ public class MainPageController extends AbsController {
     @Autowired
     private MainPageService mainPageService;
 
+    @GetMapping("/upload_file")
+    public String uploadfile(@RequestParam Map param) {
+        try {
+            return "file";
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            return "RuntimeException";
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "Exception";
+        }
+    }
+
     @GetMapping("/mine/info")
     @ResponseBody
     public Object selectMineInfo(@RequestParam Map param) {

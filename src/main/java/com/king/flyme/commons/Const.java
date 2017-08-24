@@ -7,4 +7,6 @@ public class Const {
 
     public static final String DEFAULT_PASSWORD = "123456";
 
+    public static final String DEFAULT_FILE_PATH = "E://test//";
+
 }
