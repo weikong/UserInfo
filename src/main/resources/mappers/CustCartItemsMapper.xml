@@ -2,17 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.king.flyme.dao.CustCartMapper">
 
-    <select id="selectCartItems" parameterType="long" resultType="java.util.Map">
+    <select id="selectCartItems" parameterType="int" resultType="com.king.flyme.bean.Carts">
         SELECT
-            c.id         AS cart_id,
-            ci.id        AS item_id,
-            ci.domain_id AS domain_id,
-            ci.price     AS offer_price,
-            ci.create_at AS save_date,
-            d.*
-        FROM cart_item ci
-            LEFT JOIN cart c ON c.id = ci.cart_id
-            LEFT JOIN domain d ON ci.domain_id = d.id
+            c.*
+        FROM carts c
         WHERE c.account_id = #{accountId}
     </select>
 

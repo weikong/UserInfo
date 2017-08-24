@@ -1,5 +1,7 @@
 package com.king.flyme.dao;
 
+import com.king.flyme.bean.Carts;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +10,7 @@ import java.util.Map;
  */
 public interface CustCartMapper {
 
-    List<Map<String, Object>> selectCartItems(long accountId);
+    List<Carts> selectCartItems(int accountId);
 
     void deleteCartItem(Map map);
 }

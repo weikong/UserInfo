@@ -7,14 +7,14 @@ import java.util.Collection;
 
 public class CustUser extends User {
 
-    private Long id;
+    private Integer id;
     private String name;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -26,13 +26,13 @@ public class CustUser extends User {
         this.name = name;
     }
 
-    public CustUser(String username, String password, Collection<? extends GrantedAuthority> authorities, Long id, String name) {
+    public CustUser(String username, String password, Collection<? extends GrantedAuthority> authorities, Integer id, String name) {
         super(username, password, authorities);
         this.id = id;
         this.name = name;
     }
 
-    public CustUser(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities, Long id, String name) {
+    public CustUser(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities, Integer id, String name) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.id = id;
         this.name = name;

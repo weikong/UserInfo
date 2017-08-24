@@ -1,9 +1,11 @@
 package com.king.flyme.service;
 
 import com.king.flyme.bean.*;
+import com.king.flyme.commons.AppUtil;
 import com.king.flyme.commons.StringUtil;
 import com.king.flyme.dao.AccountMapper;
 import com.king.flyme.dao.CartsMapper;
+import com.king.flyme.dao.CustCartMapper;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,8 @@ public class CartService {
 
     @Autowired
     private CartsMapper cartsMapper;
+    @Autowired
+    private CustCartMapper custCartMapper;
 
     /**
      * 加入购物车
@@ -130,10 +134,7 @@ public class CartService {
         int account_id = MapUtils.getInteger(param, "account_id", -1);
         if (account_id == -1)
             throw new RuntimeException("该账号不存在");
-        CartsExample example = new CartsExample();
-        example.createCriteria().andAccountIdEqualTo(account_id);
-        example.setOrderByClause("time desc");
-        List<Carts> list = cartsMapper.selectByExample(example);
+        List<Carts> list = custCartMapper.selectCartItems(account_id);
         return list == null ? new ArrayList<Carts>() : list;
     }
 }

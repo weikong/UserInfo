@@ -116,7 +116,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // 擦除用户密码
             account.setPassword("******");
             // 返回用户信息。
-            return new CustUser(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities,account.getId().longValue(),account.getName());
+            return new CustUser(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities,account.getId(),account.getName());
         }
 
     }

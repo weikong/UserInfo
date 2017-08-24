@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.king.flyme.dao.CustOrderMapper">
 
-    <select id="selectCustomerOrder" resultType="my.app.sample.domain.Record" parameterType="hashmap">
+    <select id="selectCustomerOrder" resultType="com.king.flyme.bean.Record" parameterType="hashmap">
         SELECT distinct o.* FROM orders o
         inner join order_item oi on o.id = oi.order_id
         INNER JOIN domain d on oi.domain_id = d.id
@@ -37,7 +37,7 @@
 
     </sql>
 
-    <select id="loadOrderDetail" resultType="my.app.sample.domain.Record" parameterType="Map">
+    <select id="loadOrderDetail" resultType="com.king.flyme.bean.Record" parameterType="Map">
         select
         oi.id order_item_id, oi.domain_id, oi.`status` order_status, oi.bid_price, oi.counter_price,
         d.name domain_name, d.`type` domain_price_class, d.registration_price, d.status
