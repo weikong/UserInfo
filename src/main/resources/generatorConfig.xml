@@ -55,7 +55,7 @@
         <table tableName="carts" domainObjectName="Carts">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="goods_collect" domainObjectName="GoodsCellect">
+        <table tableName="goods_collect" domainObjectName="GoodsCollect">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="goods_record" domainObjectName="GoodsRecord">

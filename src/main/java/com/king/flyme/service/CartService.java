@@ -56,16 +56,15 @@ public class CartService {
         example.createCriteria().andProductIdEqualTo(product_id).andAccountIdEqualTo(account_id);
         List<Carts> list = cartsMapper.selectByExample(example);
         if (list != null && list.size() > 0){
+            //购物车中存在
             Carts carts = list.get(0);
-            carts.setCount(count);
-            carts.setAddress(address);
-            carts.setProductDesc(desc);
-            carts.setProductName(name);
-            carts.setPrice(price);
+            int count2 = carts.getCount();
+            carts.setCount(count2+count);
             int update = cartsMapper.updateByPrimaryKey(carts);
             if (update != 1)
                 throw new RuntimeException("加入购物车失败");
         } else {
+            //购物车中不存在
             Carts carts = new Carts();
             carts.setAccountId(account_id);
             carts.setProductId(product_id);
@@ -100,11 +99,8 @@ public class CartService {
         List<Carts> list = cartsMapper.selectByExample(example);
         if (list != null && list.size() > 0){
             Carts carts = list.get(0);
-            carts.setCount(count);
-            carts.setAddress(address);
-            carts.setProductDesc(desc);
-            carts.setProductName(name);
-            carts.setPrice(price);
+            int count2 = carts.getCount();
+            carts.setCount(count2+count);
             int update = cartsMapper.updateByPrimaryKey(carts);
             if (update != 1)
                 throw new RuntimeException("更新失败");
@@ -128,12 +124,7 @@ public class CartService {
                     throw new RuntimeException("删除失败");
             }
         }
-//        int cart_id = MapUtils.getInteger(param, "cart_id", -1);
-//        if (account_id == -1)
-//            throw new RuntimeException("购物车中不存在此商品");
-//        int del = cartsMapper.deleteByPrimaryKey(cart_id);
-//        if (del != 1)
-//            throw new RuntimeException("删除失败");
+
     }
 
     /**
