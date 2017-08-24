@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.king.flyme.dao.CustOrderMapper">
+
+    <select id="selectCustomerOrder" resultType="my.app.sample.domain.Record" parameterType="hashmap">
+        SELECT distinct o.* FROM orders o
+        inner join order_item oi on o.id = oi.order_id
+        INNER JOIN domain d on oi.domain_id = d.id
+        <where>
+            <if test="current_user_id!=null">
+                o.account_id = #{current_user_id}
+            </if>
+            <if test="order_status != null and order_status!=''">
+                and oi.`status` in (${order_status})
+            </if>
+            <if test="domain_price_class != null and domain_price_class!=''">
+                and d.`type` in (${domain_price_class})
+            </if>
+        </where>
+        order by oi.create_at desc
+    </select>
+
+
+    <sql id="searchSellerOrderCondition">
+        <if test="order_status != null and order_status!=''">
+            and oi.`status` in (${order_status})
+        </if>
+        <if test="domain_price_class != null and domain_price_class!=''">
+            and d.`type` in (${domain_price_class})
+        </if>
+        <if test="seller_id != null">
+            and oi.seller_id = ${seller_id}
+        </if>
+        <if test="seller_id == null and unowned_orders != null">
+            and oi.seller_id is null
+        </if>
+
+    </sql>
+
+    <select id="loadOrderDetail" resultType="my.app.sample.domain.Record" parameterType="Map">
+        select
+        oi.id order_item_id, oi.domain_id, oi.`status` order_status, oi.bid_price, oi.counter_price,
+        d.name domain_name, d.`type` domain_price_class, d.registration_price, d.status
+        domain_status,d.registration_date, oi.buy_it_now
+        from orders o
+        inner join order_item oi on o.id = oi.order_id
+        left join domain d on oi.domain_id = d.id
+        <where>
+            o.id = ${order_id}
+            <include refid="searchSellerOrderCondition"/>
+            order by oi.create_at asc
+        </where>
+    </select>
+</mapper>
