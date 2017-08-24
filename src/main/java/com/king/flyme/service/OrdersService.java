@@ -92,10 +92,11 @@ public class OrdersService {
         if (account_id == -1)
             throw new RuntimeException("该账号不存在");
         List<Map> list = custOrderMapper.selectCustomerOrder(param);
-        for (Map item : list){
-            List<Map> orderItems = custOrderMapper.loadOrderDetail(item);
-            item.put("order_items",orderItems);
-        }
+        log.info(list.toString());
+//        for (Map item : list){
+//            List<Map> orderItems = custOrderMapper.loadOrderDetail(item);
+//            item.put("order_items",orderItems);
+//        }
         return list;
     }
 }

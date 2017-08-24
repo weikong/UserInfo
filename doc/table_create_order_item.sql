@@ -22,6 +22,6 @@ create index product_id
   on order_item (product_id)
 ;
 
-comment on column order_item.state is '待发货：1；待收货：2；已完成：9'
+comment on column order_item.state is '待付款：-1；待发货：1；待收货：2；已完成：9'
 ;
 

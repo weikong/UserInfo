@@ -88,7 +88,7 @@ public class CartService {
         String product_id = MapUtils.getString(param, "product_id");
         if (org.thymeleaf.util.StringUtils.isEmpty(product_id))
             throw new RuntimeException("商品不存在");
-        int count = MapUtils.getInteger(param, "count", -1);
+        int count = MapUtils.getInteger(param, "count", 0);
         String name = MapUtils.getString(param, "name","");
         String desc = MapUtils.getString(param, "desc","");
         float price = MapUtils.getFloat(param, "price",0f);

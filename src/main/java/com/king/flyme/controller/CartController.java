@@ -54,9 +54,9 @@ public class CartController extends AbsController {
         }
     }
 
-    @GetMapping("/select/all")
+    @GetMapping("/select/my")
     @ResponseBody
-    public Object selectCartAll(@RequestParam Map param) {
+    public Object selectMyCart(@RequestParam Map param) {
         try {
             List<Carts> list = cartService.selectMyCart(param);
             return ajax(list);

@@ -39,7 +39,7 @@ public class OrdersController extends AbsController {
         }
     }
 
-    @GetMapping("/select/all")
+    @GetMapping("/select/my")
     @ResponseBody
     public Object selectOrderAll(@RequestParam Map param) {
         try {
