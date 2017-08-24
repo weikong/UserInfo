@@ -1,8 +1,10 @@
 package com.king.flyme.controller;
 
 import com.king.flyme.bean.Carts;
+import com.king.flyme.bean.OrderItem;
 import com.king.flyme.service.CartService;
 import com.king.flyme.service.OrdersService;
+import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,26 +26,36 @@ public class OrdersController extends AbsController {
     @Autowired
     private OrdersService ordersService;
 
-    @PostMapping("/join")
+    @GetMapping("/join")
     @ResponseBody
     public Object joinOrderItem(@RequestParam Map param) {
         try {
             ordersService.joinOrders(param);
+            try {
+                boolean flag = MapUtils.getBoolean(param,"flag",false);
+                if (flag){
+                    //插入数据后是否返回数据列表 flag
+                    List<OrderItem> list = ordersService.selectMyStateOrders(param);
+                    return ajax(list);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
             return ajax();
         } catch (RuntimeException e) {
             log.error(e.getMessage());
-            return ajax(e);
+            return ajax(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage());
             return ajax(e);
         }
     }
 
-    @GetMapping("/select/my")
+    @GetMapping("/select/my_state")
     @ResponseBody
-    public Object selectOrderAll(@RequestParam Map param) {
+    public Object selectMyStateOrder(@RequestParam Map param) {
         try {
-            List<Map> list = ordersService.selectMyOrders(param);
+            List<OrderItem> list = ordersService.selectMyStateOrders(param);
             return ajax(list);
         } catch (RuntimeException e) {
             log.error(e.getMessage());
@@ -54,7 +66,7 @@ public class OrdersController extends AbsController {
         }
     }
 
-    @PostMapping("/delete")
+    @GetMapping("/delete")
     @ResponseBody
     public Object delOrderItems(@RequestParam Map param) {
         try {

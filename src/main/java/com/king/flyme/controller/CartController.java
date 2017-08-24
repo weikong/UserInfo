@@ -1,8 +1,10 @@
 package com.king.flyme.controller;
 
 import com.king.flyme.bean.Carts;
+import com.king.flyme.bean.OrderItem;
 import com.king.flyme.service.AccountService;
 import com.king.flyme.service.CartService;
+import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,16 @@ public class CartController extends AbsController {
     public Object joinCartItem(@RequestParam Map param) {
         try {
             cartService.joinCartItem(param);
+            try {
+                boolean flag = MapUtils.getBoolean(param,"flag",false);
+                if (flag){
+                    //插入数据后是否返回数据列表 flag
+                    List<Carts> list = cartService.selectMyCart(param);
+                    return ajax(list);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
             return ajax();
         } catch (RuntimeException e) {
             log.error(e.getMessage());

@@ -8,34 +8,14 @@
         order by oi.time desc
     </select>
 
-    <sql id="searchSellerOrderCondition">
-        <if test="order_status != null and order_status!=''">
-            and oi.`status` in (${order_status})
-        </if>
-        <if test="domain_price_class != null and domain_price_class!=''">
-            and d.`type` in (${domain_price_class})
-        </if>
-        <if test="seller_id != null">
-            and oi.seller_id = ${seller_id}
-        </if>
-        <if test="seller_id == null and unowned_orders != null">
-            and oi.seller_id is null
-        </if>
-
-    </sql>
-
-    <select id="loadOrderDetail" resultType="com.king.flyme.bean.Record" parameterType="Map">
-        select
-        oi.id order_item_id, oi.domain_id, oi.`status` order_status, oi.bid_price, oi.counter_price,
-        d.name domain_name, d.`type` domain_price_class, d.registration_price, d.status
-        domain_status,d.registration_date, oi.buy_it_now
-        from orders o
-        inner join order_item oi on o.id = oi.order_id
-        left join domain d on oi.domain_id = d.id
-        <where>
-            o.id = ${order_id}
-            <include refid="searchSellerOrderCondition"/>
-            order by oi.create_at asc
-        </where>
-    </select>
+    <insert id="insertOrder" parameterType="java.util.List">
+        INSERT INTO order_item
+        (account_id,order_id,product_id,product_name,product_desc,price,count,address,state) VALUES
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.accountId},#{item.orderId},#{item.productId},
+            #{item.productName},#{item.productDesc},#{item.price},#{item.count},
+            #{item.address},#{item.state}
+            )
+        </foreach>
+    </insert>
 </mapper>

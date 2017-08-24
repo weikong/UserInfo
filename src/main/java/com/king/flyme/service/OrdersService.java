@@ -53,26 +53,30 @@ public class OrdersService {
         String desc = MapUtils.getString(param, "desc","");
         float price = MapUtils.getFloat(param, "price",0f);
         String address = MapUtils.getString(param, "address","");
-        int state = 0;
+        int state = -1;
         Orders orders = new Orders();
+        orders.setId(null);
         orders.setAccountId(account_id);
         Date date = new Date();
-        String order_id = date.toString();
+        String order_id = account_id+" "+date.toLocaleString();
         orders.setOrderId(order_id);
+        orders.setTime(date);
         int insert1 = ordersMapper.insert(orders);
         if (insert1 != 1)
             throw new RuntimeException("加入订单失败");
         OrderItem orderItem = new OrderItem();
+        orderItem.setId(null);
+        orderItem.setTime(date);
         orderItem.setOrderId(order_id);
         orderItem.setProductId(product_id);
         orderItem.setAccountId(account_id);
         orderItem.setCount(count);
-        orderItem.setName(name);
-        orderItem.setDesc(desc);
+        orderItem.setProductName(name);
+        orderItem.setProductDesc(desc);
         orderItem.setAddress(address);
         orderItem.setPrice(price);
-        orderItem.setState(0);
-        int insert2 = orderItemMapper.insert(orderItem);
+        orderItem.setState(state);
+        int insert2 = orderItemMapper.insertSelective(orderItem);
         if (insert2 != 1)
             throw new RuntimeException("加入订单失败");
     }
@@ -81,22 +85,49 @@ public class OrdersService {
      * 删除订单
      */
     public void delOrders(Map param) {
-
-    }
-
-    /**
-     * 查询订单 - ALL
-     */
-    public List<Map> selectMyOrders(Map param) {
         int account_id = MapUtils.getInteger(param, "account_id", -1);
         if (account_id == -1)
             throw new RuntimeException("该账号不存在");
-        List<Map> list = custOrderMapper.selectCustomerOrder(param);
-        log.info(list.toString());
-//        for (Map item : list){
-//            List<Map> orderItems = custOrderMapper.loadOrderDetail(item);
-//            item.put("order_items",orderItems);
-//        }
+        String order_id = MapUtils.getString(param,"order_id");
+        OrdersExample ordersExample = new OrdersExample();
+        ordersExample.createCriteria().andOrderIdEqualTo(order_id).andAccountIdEqualTo(account_id);
+        List<Orders> list1 = ordersMapper.selectByExample(ordersExample);
+        if (list1 == null || list1.size() == 0)
+            throw new RuntimeException("该订单已不存在");
+        for (Orders orders:list1){
+            int del = ordersMapper.deleteByPrimaryKey(orders.getId());
+            if (del != 1)
+                throw new RuntimeException("订单删除失败");
+        }
+        OrderItemExample orderItemExample = new OrderItemExample();
+        orderItemExample.createCriteria().andOrderIdEqualTo(order_id).andAccountIdEqualTo(account_id);
+        List<OrderItem> list2 = orderItemMapper.selectByExample(orderItemExample);
+        if (list2 == null || list2.size() == 0)
+            throw new RuntimeException("该订单已不存在");
+        for (OrderItem orderItem:list2){
+            int del = orderItemMapper.deleteByPrimaryKey(orderItem.getId());
+            if (del != 1)
+                throw new RuntimeException("订单删除失败");
+        }
+    }
+
+    /**
+     * 查询订单 - state
+     */
+    public List<OrderItem> selectMyStateOrders(Map param) {
+        int account_id = MapUtils.getInteger(param, "account_id", -1);
+        if (account_id == -1)
+            throw new RuntimeException("该账号不存在");
+        Integer state = MapUtils.getInteger(param, "state", null);
+        OrderItemExample example = new OrderItemExample();
+        OrderItemExample.Criteria criteria = example.createCriteria();
+        criteria.andAccountIdEqualTo(account_id);
+        if (state == null)
+            criteria.andStateIsNotNull();
+        else
+            criteria.andStateEqualTo(state);
+        example.setOrderByClause("time desc");
+        List<OrderItem> list = orderItemMapper.selectByExample(example);
         return list;
     }
 }

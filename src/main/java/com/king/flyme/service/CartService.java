@@ -1,5 +1,7 @@
 package com.king.flyme.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.king.flyme.bean.*;
 import com.king.flyme.commons.AppUtil;
 import com.king.flyme.commons.StringUtil;
@@ -57,8 +59,8 @@ public class CartService {
             Carts carts = list.get(0);
             carts.setCount(count);
             carts.setAddress(address);
-            carts.setDesc(desc);
-            carts.setName(name);
+            carts.setProductDesc(desc);
+            carts.setProductName(name);
             carts.setPrice(price);
             int update = cartsMapper.updateByPrimaryKey(carts);
             if (update != 1)
@@ -69,8 +71,8 @@ public class CartService {
             carts.setProductId(product_id);
             carts.setCount(count);
             carts.setAddress(address);
-            carts.setDesc(desc);
-            carts.setName(name);
+            carts.setProductDesc(desc);
+            carts.setProductName(name);
             carts.setPrice(price);
             int insert = cartsMapper.insert(carts);
             if (insert != 1)
@@ -100,8 +102,8 @@ public class CartService {
             Carts carts = list.get(0);
             carts.setCount(count);
             carts.setAddress(address);
-            carts.setDesc(desc);
-            carts.setName(name);
+            carts.setProductDesc(desc);
+            carts.setProductName(name);
             carts.setPrice(price);
             int update = cartsMapper.updateByPrimaryKey(carts);
             if (update != 1)
@@ -115,16 +117,23 @@ public class CartService {
      * 删除购物车中商品
      * */
     public void delCartItems(Map param){
-        // TODO: 2017/8/24 删除多个商品
         int account_id = MapUtils.getInteger(param, "account_id", -1);
         if (account_id == -1)
             throw new RuntimeException("该账号不存在");
-        String product_id = MapUtils.getString(param, "product_id");
-        if (org.thymeleaf.util.StringUtils.isEmpty(product_id))
-            throw new RuntimeException("商品不存在");
-        CartsExample example = new CartsExample();
-        example.createCriteria().andProductIdEqualTo(product_id).andAccountIdEqualTo(account_id);
-        int del = cartsMapper.deleteByExample(example);
+        List<Integer> carts = (List<Integer>) MapUtils.getObject(param,"carts");
+        if (carts != null && carts.size() > 0){
+            for (int cart_id : carts){
+                int del = cartsMapper.deleteByPrimaryKey(cart_id);
+                if (del != 1)
+                    throw new RuntimeException("删除失败");
+            }
+        }
+//        int cart_id = MapUtils.getInteger(param, "cart_id", -1);
+//        if (account_id == -1)
+//            throw new RuntimeException("购物车中不存在此商品");
+//        int del = cartsMapper.deleteByPrimaryKey(cart_id);
+//        if (del != 1)
+//            throw new RuntimeException("删除失败");
     }
 
     /**
