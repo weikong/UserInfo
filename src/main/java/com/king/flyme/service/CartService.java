@@ -36,11 +36,13 @@ public class CartService {
     private CartsMapper cartsMapper;
     @Autowired
     private CustCartMapper custCartMapper;
+    @Autowired
+    private ProductService productService;
 
     /**
      * 加入购物车
-     * */
-    public void joinCartItem(Map param){
+     */
+    public void joinCartItem(Map param) {
         int account_id = MapUtils.getInteger(param, "account_id", -1);
         if (account_id == -1)
             throw new RuntimeException("该账号不存在");
@@ -48,18 +50,18 @@ public class CartService {
         if (org.thymeleaf.util.StringUtils.isEmpty(product_id))
             throw new RuntimeException("商品不存在");
         int count = MapUtils.getInteger(param, "count", -1);
-        String name = MapUtils.getString(param, "name","");
-        String desc = MapUtils.getString(param, "desc","");
-        float price = MapUtils.getFloat(param, "price",0f);
-        String address = MapUtils.getString(param, "address","");
+        String name = MapUtils.getString(param, "name", "");
+        String desc = MapUtils.getString(param, "desc", "");
+        float price = MapUtils.getFloat(param, "price", 0f);
+        String address = MapUtils.getString(param, "address", "");
         CartsExample example = new CartsExample();
         example.createCriteria().andProductIdEqualTo(product_id).andAccountIdEqualTo(account_id);
         List<Carts> list = cartsMapper.selectByExample(example);
-        if (list != null && list.size() > 0){
+        if (list != null && list.size() > 0) {
             //购物车中存在
             Carts carts = list.get(0);
             int count2 = carts.getCount();
-            carts.setCount(count2+count);
+            carts.setCount(count2 + count);
             int update = cartsMapper.updateByPrimaryKey(carts);
             if (update != 1)
                 throw new RuntimeException("加入购物车失败");
@@ -81,8 +83,8 @@ public class CartService {
 
     /**
      * 更新购物车
-     * */
-    public void updateCartItem(Map param){
+     */
+    public void updateCartItem(Map param) {
         int account_id = MapUtils.getInteger(param, "account_id", -1);
         if (account_id == -1)
             throw new RuntimeException("该账号不存在");
@@ -90,17 +92,17 @@ public class CartService {
         if (org.thymeleaf.util.StringUtils.isEmpty(product_id))
             throw new RuntimeException("商品不存在");
         int count = MapUtils.getInteger(param, "count", 0);
-        String name = MapUtils.getString(param, "name","");
-        String desc = MapUtils.getString(param, "desc","");
-        float price = MapUtils.getFloat(param, "price",0f);
-        String address = MapUtils.getString(param, "address","");
+        String name = MapUtils.getString(param, "name", "");
+        String desc = MapUtils.getString(param, "desc", "");
+        float price = MapUtils.getFloat(param, "price", 0f);
+        String address = MapUtils.getString(param, "address", "");
         CartsExample example = new CartsExample();
         example.createCriteria().andProductIdEqualTo(product_id).andAccountIdEqualTo(account_id);
         List<Carts> list = cartsMapper.selectByExample(example);
-        if (list != null && list.size() > 0){
+        if (list != null && list.size() > 0) {
             Carts carts = list.get(0);
             int count2 = carts.getCount();
-            carts.setCount(count2+count);
+            carts.setCount(count2 + count);
             int update = cartsMapper.updateByPrimaryKey(carts);
             if (update != 1)
                 throw new RuntimeException("更新失败");
@@ -111,14 +113,14 @@ public class CartService {
 
     /**
      * 删除购物车中商品
-     * */
-    public void delCartItems(Map param){
+     */
+    public void delCartItems(Map param) {
         int account_id = MapUtils.getInteger(param, "account_id", -1);
         if (account_id == -1)
             throw new RuntimeException("该账号不存在");
-        List<Integer> carts = (List<Integer>) MapUtils.getObject(param,"carts");
-        if (carts != null && carts.size() > 0){
-            for (int cart_id : carts){
+        List<Integer> carts = (List<Integer>) MapUtils.getObject(param, "carts");
+        if (carts != null && carts.size() > 0) {
+            for (int cart_id : carts) {
                 int del = cartsMapper.deleteByPrimaryKey(cart_id);
                 if (del != 1)
                     throw new RuntimeException("删除失败");
@@ -129,12 +131,20 @@ public class CartService {
 
     /**
      * 查询购物车中商品
-     * */
-    public List<Carts> selectMyCart(Map param){
+     */
+    public List<Object> selectMyCart(Map param) {
         int account_id = MapUtils.getInteger(param, "account_id", -1);
         if (account_id == -1)
             throw new RuntimeException("该账号不存在");
         List<Carts> list = custCartMapper.selectCartItems(account_id);
-        return list == null ? new ArrayList<Carts>() : list;
+        List<Object> datas = new ArrayList<>();
+        if (list != null && list.size() > 0) {
+            for (Carts carts : list) {
+                String product_id = carts.getProductId();
+                Map item = productService.selectProductDetail(param);
+                datas.add(item);
+            }
+        }
+        return datas;
     }
 }

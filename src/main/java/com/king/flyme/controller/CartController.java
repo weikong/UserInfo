@@ -32,13 +32,13 @@ public class CartController extends AbsController {
         try {
             cartService.joinCartItem(param);
             try {
-                boolean flag = MapUtils.getBoolean(param,"flag",false);
-                if (flag){
+                boolean flag = MapUtils.getBoolean(param, "flag", false);
+                if (flag) {
                     //插入数据后是否返回数据列表 flag
-                    List<Carts> list = cartService.selectMyCart(param);
+                    List<Object> list = cartService.selectMyCart(param);
                     return ajax(list);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return ajax();
@@ -70,7 +70,7 @@ public class CartController extends AbsController {
     @ResponseBody
     public Object selectMyCart(@RequestParam Map param) {
         try {
-            List<Carts> list = cartService.selectMyCart(param);
+            List<Object> list = cartService.selectMyCart(param);
             return ajax(list);
         } catch (RuntimeException e) {
             log.error(e.getMessage());

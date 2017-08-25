@@ -29,8 +29,8 @@ public class ProductController extends AbsController {
     @ResponseBody
     public Object selectProductDetail(@RequestParam Map param) {
         try {
-            JSONObject object = productService.selectProductDetail(param);
-            return ajax(object);
+            Map map = productService.selectProductDetail(param);
+            return ajax(map);
         } catch (RuntimeException e) {
             log.error(e.getMessage());
             return ajax(e);

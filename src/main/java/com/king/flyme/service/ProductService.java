@@ -35,10 +35,7 @@ public class ProductService {
      * 3、优惠券
      * 4、选择种类
      * */
-    public JSONObject selectProductDetail(Map param){
-        int account_id = MapUtils.getInteger(param, "account_id", -1);
-        if (account_id == -1)
-            throw new RuntimeException("该账号不存在");
+    public Map selectProductDetail(Map param){
         String product_id = MapUtils.getString(param, "product_id", "");
         // TODO: 2017/8/25 根据 product_id 查询商品详情
         GoodsRecordExample example = new GoodsRecordExample();
