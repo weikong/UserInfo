@@ -71,8 +71,14 @@ public class RecordService {
     /**
      * 查询足迹中商品
      * */
-    public List<Map> selectMyRecord(Map param){
-        return null;
+    public List<GoodsRecord> selectMyRecord(Map param){
+        int account_id = MapUtils.getInteger(param, "account_id", -1);
+        if (account_id == -1)
+            throw new RuntimeException("该账号不存在");
+        GoodsRecordExample example = new GoodsRecordExample();
+        example.createCriteria().andAccountIdEqualTo(account_id);
+        List<GoodsRecord> list = recordMapper.selectByExample(example);
+        return list;
     }
 
     /**

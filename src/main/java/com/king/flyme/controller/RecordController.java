@@ -1,5 +1,6 @@
 package com.king.flyme.controller;
 
+import com.king.flyme.bean.GoodsRecord;
 import com.king.flyme.service.RecordService;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public class RecordController extends AbsController {
     @Autowired
     private RecordService recordService;
 
-    @GetMapping("/join")
+    @PostMapping("/join")
     @ResponseBody
     public Object joinRecordItem(@RequestParam Map param) {
         try {
@@ -32,7 +33,7 @@ public class RecordController extends AbsController {
                 boolean flag = MapUtils.getBoolean(param,"flag",false);
                 if (flag){
                     //插入数据后是否返回数据列表 flag
-                    List<Map> list = recordService.selectMyRecord(param);
+                    List<GoodsRecord> list = recordService.selectMyRecord(param);
                     return ajax(list);
                 }
             } catch (Exception e){
@@ -48,11 +49,11 @@ public class RecordController extends AbsController {
         }
     }
 
-    @GetMapping("/select/my")
+    @GetMapping("/select_my")
     @ResponseBody
     public Object selectMyRecord(@RequestParam Map param) {
         try {
-            List<Map> list = recordService.selectMyRecord(param);
+            List<GoodsRecord> list = recordService.selectMyRecord(param);
             return ajax(list);
         } catch (RuntimeException e) {
             log.error(e.getMessage());
@@ -78,7 +79,7 @@ public class RecordController extends AbsController {
         }
     }
 
-    @GetMapping("/clear")
+    @PostMapping("/clear")
     @ResponseBody
     public Object clearRecords(@RequestParam Map param) {
         try {
