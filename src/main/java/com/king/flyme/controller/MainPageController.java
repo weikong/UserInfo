@@ -1,5 +1,7 @@
 package com.king.flyme.controller;
 
+import com.king.flyme.commons.Const;
+import com.king.flyme.commons.FileUtil;
 import com.king.flyme.service.AccountService;
 import com.king.flyme.service.MainPageService;
 import org.apache.commons.collections4.MapUtils;
@@ -67,6 +69,26 @@ public class MainPageController extends AbsController {
             return ajax(e);
         }
     }
+
+    @GetMapping("/kuaidi_data")
+    @ResponseBody
+    public Object selectKuaiDiData(@RequestParam Map param) {
+        try {
+            String kdType = MapUtils.getString(param,"type",Const.ZhongTong);
+            String kdId = MapUtils.getString(param,"id",Const.KuaiDiOrderId);
+            String strKuaidi = String.format(Const.KuaiDi,kdType,kdId);
+            String info = FileUtil.getNetInfo(strKuaidi);
+            return ajax(info);
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            return ajax(e);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ajax(e);
+        }
+    }
+
+
 
     @GetMapping("/main/mine_info")
     @ResponseBody

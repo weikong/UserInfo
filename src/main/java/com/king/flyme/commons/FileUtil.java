@@ -4,6 +4,9 @@ import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by xinzhendi-031 on 2017/8/24.
@@ -48,5 +51,31 @@ public class FileUtil {
                 }
             }
         }
+    }
+
+    public static String getNetInfo(String strUrl){
+        StringBuffer info = new StringBuffer();
+        URL url = null;//要调用的url
+        try {
+            url = new URL(strUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setRequestMethod("GET");//设置get方式获取数据
+            if (conn.getResponseCode() == 200) {//如果连接成功
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn
+                        .getInputStream()));//创建流
+                String lines = null;
+                while ((lines = br.readLine()) != null) {
+                    info.append(lines);
+                }
+                br.close();
+            }
+            conn.disconnect();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return info.toString();
     }
 }

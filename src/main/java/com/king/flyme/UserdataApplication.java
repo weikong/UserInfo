@@ -16,6 +16,6 @@ public class UserdataApplication implements EmbeddedServletContainerCustomizer {
 
 	@Override
 	public void customize(ConfigurableEmbeddedServletContainer configurableEmbeddedServletContainer) {
-		configurableEmbeddedServletContainer.setPort(8080);
+		configurableEmbeddedServletContainer.setPort(8090);
 	}
 }

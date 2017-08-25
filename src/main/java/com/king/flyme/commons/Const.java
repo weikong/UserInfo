@@ -9,4 +9,10 @@ public class Const {
 
     public static final String DEFAULT_FILE_PATH = "E://test//";
 
+    public static final String KuaiDi = "http://www.kuaidi100.com/query?type=%s&postid=%s";
+
+    public static final String ZhongTong = "zhongtong";
+
+    public static final String KuaiDiOrderId = "450439021485";
+
 }
