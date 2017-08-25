@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2017-08-25 14:17:28
+Date: 2017-08-25 18:26:48
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -102,6 +102,32 @@ INSERT INTO `goods_record` VALUES ('1', '2', 'a0001', 'aaa', 'aaaaaaaaaaa', '21'
 INSERT INTO `goods_record` VALUES ('2', '2', 'a0002', 'bbb', 'bbbbbbbbbb', '33', '西昌', '2017-08-25 11:15:31');
 INSERT INTO `goods_record` VALUES ('3', '1', 'a0003', 'ccc', 'ccccccccccc', '50', '龙泉', '2017-08-25 11:06:44');
 INSERT INTO `goods_record` VALUES ('4', '2', 'a0004', 'ddd', 'dddddddddddd', '12', '宜宾', '2017-08-25 11:07:28');
+
+-- ----------------------------
+-- Table structure for kuaidi
+-- ----------------------------
+DROP TABLE IF EXISTS `kuaidi`;
+CREATE TABLE `kuaidi` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of kuaidi
+-- ----------------------------
+INSERT INTO `kuaidi` VALUES ('1', '申通', 'shentong');
+INSERT INTO `kuaidi` VALUES ('2', 'EMS', 'ems');
+INSERT INTO `kuaidi` VALUES ('3', '顺丰', 'shunfeng');
+INSERT INTO `kuaidi` VALUES ('4', '圆通', 'yuantong');
+INSERT INTO `kuaidi` VALUES ('5', '中通', 'zhongtong');
+INSERT INTO `kuaidi` VALUES ('6', '韵达', 'yunda');
+INSERT INTO `kuaidi` VALUES ('7', '天天', 'tiantian');
+INSERT INTO `kuaidi` VALUES ('8', '汇通', 'huitongkuaidi');
+INSERT INTO `kuaidi` VALUES ('9', '全峰', 'quanfengkuaidi');
+INSERT INTO `kuaidi` VALUES ('10', '德邦', 'debangwuliu');
+INSERT INTO `kuaidi` VALUES ('11', '宅急送', 'zhaijisong');
 
 -- ----------------------------
 -- Table structure for order_item
