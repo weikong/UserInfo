@@ -23,7 +23,7 @@ public class RecordController extends AbsController {
     @Autowired
     private RecordService recordService;
 
-    @PostMapping("/join")
+    @GetMapping("/join")
     @ResponseBody
     public Object joinRecordItem(@RequestParam Map param) {
         try {
@@ -68,6 +68,21 @@ public class RecordController extends AbsController {
     public Object delRecordItems(@RequestParam Map param) {
         try {
             recordService.delRecordItems(param);
+            return ajax();
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            return ajax(e);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ajax(e);
+        }
+    }
+
+    @GetMapping("/clear")
+    @ResponseBody
+    public Object clearRecords(@RequestParam Map param) {
+        try {
+            recordService.clearRecords(param);
             return ajax();
         } catch (RuntimeException e) {
             log.error(e.getMessage());
