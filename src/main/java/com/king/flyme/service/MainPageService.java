@@ -36,6 +36,13 @@ public class MainPageService {
     private OrderItemMapper orderItemMapper;
 
     /**
+     * 查询首页数据
+     */
+    public Map selectMainData(Map param) {
+        return param;
+    }
+
+    /**
      * 查询首页我的信息
      */
     public Map selectMineInfo(Map param) {
