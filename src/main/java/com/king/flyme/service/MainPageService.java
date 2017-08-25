@@ -37,8 +37,23 @@ public class MainPageService {
 
     /**
      * 查询首页数据
+     * 1、Banner数据
+     * 2、热销水果数据
+     * 3、功效水果数据
+     * 4、新鲜预售数据
      */
     public Map selectMainData(Map param) {
+        return param;
+    }
+
+    /**
+     * 1、用户地址
+     * 2、用户长查询水果
+     * 种类（李子）、酸甜、产地、大小、好坏、热带、价格、功效、稀有
+     * */
+    public Map selectRecommendData(Map param) {
+        // TODO: 2017/8/25  种类（李子）、酸甜、产地、大小、好坏、热带、价格、功效、稀有
+        int account_id = MapUtils.getInteger(param, "account_id", -1);
         return param;
     }
 

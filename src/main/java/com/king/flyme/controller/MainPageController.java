@@ -53,6 +53,21 @@ public class MainPageController extends AbsController {
         }
     }
 
+    @GetMapping("/recommend_data")
+    @ResponseBody
+    public Object selectRecommendData(@RequestParam Map param) {
+        try {
+            mainPageService.selectRecommendData(param);
+            return ajax(param);
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            return ajax(e);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ajax(e);
+        }
+    }
+
     @GetMapping("/main/mine_info")
     @ResponseBody
     public Object selectMineInfo(@RequestParam Map param) {
