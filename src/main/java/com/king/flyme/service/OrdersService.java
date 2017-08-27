@@ -130,4 +130,14 @@ public class OrdersService {
         List<OrderItem> list = orderItemMapper.selectByExample(example);
         return list;
     }
+
+    public void confirmOrder(Map param) {
+        int account_id = MapUtils.getInteger(param, "account_id", -1);
+        if (account_id == -1)
+            throw new RuntimeException("该账号不存在");
+        String order_id = MapUtils.getString(param, "order_id");
+        String verification_code = MapUtils.getString(param, "verification_code");
+
+    }
+
 }
