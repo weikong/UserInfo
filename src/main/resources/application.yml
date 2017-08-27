@@ -30,7 +30,7 @@ spring:
   profiles: develop
   datasource:
     url: jdbc:mysql://localhost/fruitlove?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
-    username: wei.kong
+    username: root
     password: 123456
     initialSize: 5
     minIdle: 5

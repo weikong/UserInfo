@@ -61,6 +61,12 @@
         <table tableName="goods_record" domainObjectName="GoodsRecord">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="Address" domainObjectName="Address">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="Product" domainObjectName="Product">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 
 </generatorConfiguration>

@@ -31,6 +31,9 @@ public class AccountService {
     @Autowired
     private AccountMapper accountMapper;
 
+    /**
+     * 通过邮箱或电话查询用户信息
+     * */
     public Account findUserByAccount(String account) {
         if (StringUtils.isEmpty(account))
             return null;
@@ -40,6 +43,16 @@ public class AccountService {
         if (list != null && list.size() > 0)
             return list.get(0);
         return null;
+    }
+
+    /**
+     * 通过ID查询用户信息
+     * */
+    public Account findUserById(int id) {
+        if (id <= 0)
+            throw new RuntimeException("该账号不存在");
+        Account account = accountMapper.selectByPrimaryKey(id);
+        return account;
     }
 
     /**
