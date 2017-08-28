@@ -1,6 +1,7 @@
 package com.king.flyme.controller;
 
 import com.king.flyme.bean.Carts;
+import com.king.flyme.bean.CustOrders;
 import com.king.flyme.bean.OrderItem;
 import com.king.flyme.service.CartService;
 import com.king.flyme.service.OrdersService;
@@ -45,7 +46,7 @@ public class OrdersController extends AbsController {
     @ResponseBody
     public Object selectMyStateOrder(@RequestParam Map param) {
         try {
-            List<OrderItem> list = ordersService.selectMyStateOrders(param);
+            List<CustOrders> list = ordersService.selectMyStatusOrders(param);
             return ajax(list);
         } catch (RuntimeException e) {
             log.error(e.getMessage());

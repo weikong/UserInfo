@@ -47,13 +47,14 @@ public class OrdersService {
         if (StringUtils.isEmpty(data))
             throw new RuntimeException("数据错误");
         List<Object> list = new ArrayList<>();
-        int state = -1;
+        int status = 0;//初始化订单状态
         Orders orders = new Orders();
         orders.setId(null);
         orders.setAccountId(account_id);
         Date date = new Date();
         String order_id = UUID.randomUUID().toString();//account_id+" "+date.toLocaleString();
         orders.setOrderId(order_id);
+        orders.setStatus(status);
         orders.setTime(date);
         int insert1 = ordersMapper.insert(orders);
         if (insert1 != 1)
@@ -89,7 +90,7 @@ public class OrdersService {
             orderItem.setProductDesc(desc);
             orderItem.setAddress(address);
             orderItem.setPrice(price);
-            orderItem.setState(state);
+//            orderItem.setState(state);
             int insert2 = orderItemMapper.insertSelective(orderItem);
             if (insert2 != 1)
                 throw new RuntimeException("加入订单失败");
@@ -110,6 +111,8 @@ public class OrdersService {
             address = (addressList2 != null && addressList2.size() > 0) ? addressList2.get(0) : null;
         }
         dataMap.put("address", address);
+        dataMap.put("orders", orders);
+        dataMap.put("verificationCode", verificationCode);
         return dataMap;
     }
 
@@ -146,21 +149,32 @@ public class OrdersService {
     /**
      * 查询订单 - state
      */
-    public List<OrderItem> selectMyStateOrders(Map param) {
+    public List<CustOrders> selectMyStatusOrders(Map param) {
         int account_id = MapUtils.getInteger(param, "account_id", -1);
         if (account_id == -1)
             throw new RuntimeException("该账号不存在");
-        Integer state = MapUtils.getInteger(param, "state", null);
-        OrderItemExample example = new OrderItemExample();
-        OrderItemExample.Criteria criteria = example.createCriteria();
-        criteria.andAccountIdEqualTo(account_id);
-        if (state == null)
-            criteria.andStateIsNotNull();
+        List<CustOrders> custOrdersList = new ArrayList<>();
+        Integer status = MapUtils.getInteger(param, "status", null);
+        OrdersExample example = new OrdersExample();
+        OrdersExample.Criteria criteria = example.createCriteria();
+        criteria.andAccountIdEqualTo(account_id).andStatusEqualTo(status);
+        if (status == null)
+            criteria.andStatusGreaterThan(0);
         else
-            criteria.andStateEqualTo(state);
+            criteria.andStatusEqualTo(status);
         example.setOrderByClause("time desc");
-        List<OrderItem> list = orderItemMapper.selectByExample(example);
-        return list;
+        List<Orders> list = ordersMapper.selectByExample(example);
+        for (Orders orders : list) {
+            String order_id = orders.getOrderId();
+            OrderItemExample example1 = new OrderItemExample();
+            example1.createCriteria().andAccountIdEqualTo(account_id).andOrderIdEqualTo(order_id);
+            example1.setOrderByClause("time desc");
+            List<OrderItem> list1 = orderItemMapper.selectByExample(example1);
+            CustOrders custOrders = (CustOrders) orders;
+            custOrders.setOrderItemList(list1);
+            custOrdersList.add(custOrders);
+        }
+        return custOrdersList;
     }
 
     /**
@@ -179,7 +193,20 @@ public class OrdersService {
         int del = verificationCodeMapper.deleteByPrimaryKey(verification_id);
         if (del != 1)
             throw new RuntimeException("订单验证码删除失败");
-
+        //更新订单状态
+        OrdersExample example = new OrdersExample();
+        example.createCriteria().andAccountIdEqualTo(account_id).andOrderIdEqualTo(order_id);
+        List<Orders> ordersList = ordersMapper.selectByExample(example);
+        if (ordersList == null || ordersList.size() == 0) {
+            throw new RuntimeException("该订单已不存在");
+        }
+        for (Orders orders : ordersList) {
+            int status = 1;//订单待支付状态
+            orders.setStatus(status);
+            int update = ordersMapper.updateByPrimaryKeySelective(orders);
+            if (update != 1)
+                throw new RuntimeException("订单更新失败");
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package com.king.flyme.controller;
 
 import com.king.flyme.bean.OrderItem;
 import com.king.flyme.dao.OrderItemMapper;
+import com.king.flyme.dao.OrdersMapper;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,8 @@ public class PayController extends AbsController {
 
     @Autowired
     private OrderItemMapper orderItemMapper;
+    @Autowired
+    private OrdersMapper ordersMapper;
 
     /**
      * 完成付款
