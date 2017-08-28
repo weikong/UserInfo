@@ -33,7 +33,7 @@ public class MainPageService {
     @Autowired
     private CartsMapper cartsMapper;
     @Autowired
-    private OrderItemMapper orderItemMapper;
+    private OrdersMapper ordersMapper;
 
     /**
      * 查询首页数据
@@ -77,24 +77,24 @@ public class MainPageService {
         long recordCount = recordMapper.countByExample(recordExample);
         param.put("record_count",recordCount);
         //待付款订单数量
-        OrderItemExample example1 = new OrderItemExample();
-        example1.createCriteria().andAccountIdEqualTo(account_id).andStateEqualTo(-1);
-        long paymentCount = orderItemMapper.countByExample(example1);
+        OrdersExample example1 = new OrdersExample();
+        example1.createCriteria().andAccountIdEqualTo(account_id).andStatusEqualTo(1);
+        long paymentCount = ordersMapper.countByExample(example1);
         param.put("order_payment_count",paymentCount);
         //待发货订单数量
-        OrderItemExample example2 = new OrderItemExample();
-        example2.createCriteria().andAccountIdEqualTo(account_id).andStateEqualTo(1);
-        long orderSendCount = orderItemMapper.countByExample(example2);
+        OrdersExample example2 = new OrdersExample();
+        example2.createCriteria().andAccountIdEqualTo(account_id).andStatusEqualTo(2);
+        long orderSendCount = ordersMapper.countByExample(example2);
         param.put("order_send_count",orderSendCount);
         //待收货订单数量
-        OrderItemExample example3 = new OrderItemExample();
-        example3.createCriteria().andAccountIdEqualTo(account_id).andStateEqualTo(2);
-        long orderReceiveCount = orderItemMapper.countByExample(example3);
+        OrdersExample example3 = new OrdersExample();
+        example3.createCriteria().andAccountIdEqualTo(account_id).andStatusEqualTo(3);
+        long orderReceiveCount = ordersMapper.countByExample(example3);
         param.put("order_receive_count",orderReceiveCount);
         //全部订单数量
-        OrderItemExample example4 = new OrderItemExample();
-        example4.createCriteria().andAccountIdEqualTo(account_id).andStateIsNotNull();
-        long orderAllCount = orderItemMapper.countByExample(example4);
+        OrdersExample example4 = new OrdersExample();
+        example4.createCriteria().andAccountIdEqualTo(account_id).andStatusGreaterThan(0);
+        long orderAllCount = ordersMapper.countByExample(example4);
         param.put("order_all_count",orderAllCount);
         return param;
     }

@@ -29,7 +29,7 @@ public class PayController extends AbsController {
      * 待发货：2；
      * 待收货：3；
      * 取消订单：-1；
-     * 支付失敗：-9；
+     * 支付失敗：7；
      * 已完成：9
      */
 
