@@ -33,6 +33,8 @@ public class RecordService {
     public void joinRecordItem(Map param){
         try {
             int account_id = MapUtils.getInteger(param, "account_id", -1);
+            if (account_id == -1 || account_id < 0)
+                return;
             String product_id = MapUtils.getString(param, "product_id");
             GoodsRecord goodsRecord = null;
             GoodsRecordExample example = new GoodsRecordExample();

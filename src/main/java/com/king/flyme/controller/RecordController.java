@@ -29,16 +29,6 @@ public class RecordController extends AbsController {
     public Object joinRecordItem(@RequestParam Map param) {
         try {
             recordService.joinRecordItem(param);
-            try {
-                boolean flag = MapUtils.getBoolean(param,"flag",false);
-                if (flag){
-                    //插入数据后是否返回数据列表 flag
-                    List<GoodsRecord> list = recordService.selectMyRecord(param);
-                    return ajax(list);
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            }
             return ajax();
         } catch (RuntimeException e) {
             log.error(e.getMessage());
