@@ -30,18 +30,8 @@ public class OrdersController extends AbsController {
     @ResponseBody
     public Object joinOrderItem(@RequestParam Map param) {
         try {
-            ordersService.joinOrders(param);
-            try {
-                boolean flag = MapUtils.getBoolean(param,"flag",false);
-                if (flag){
-                    //插入数据后是否返回数据列表 flag
-                    List<OrderItem> list = ordersService.selectMyStateOrders(param);
-                    return ajax(list);
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-            return ajax();
+            Map data = ordersService.joinOrders(param);
+            return ajax(data);
         } catch (RuntimeException e) {
             log.error(e.getMessage());
             return ajax(e.getMessage());
@@ -71,6 +61,21 @@ public class OrdersController extends AbsController {
     public Object delOrderItems(@RequestParam Map param) {
         try {
             ordersService.delOrders(param);
+            return ajax();
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            return ajax(e);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ajax(e);
+        }
+    }
+
+    @GetMapping("/confirm")
+    @ResponseBody
+    public Object confirmOrderItems(@RequestParam Map param) {
+        try {
+            ordersService.confirmOrder(param);
             return ajax();
         } catch (RuntimeException e) {
             log.error(e.getMessage());

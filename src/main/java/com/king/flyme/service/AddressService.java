@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,11 +42,17 @@ public class AddressService {
         String phone = MapUtils.getString(param, "phone");
         String area = MapUtils.getString(param, "area");
         String detail_address = MapUtils.getString(param, "detail_address");
+        int state = -1;
         if (StringUtils.isEmpty(name)
                 || StringUtils.isEmpty(phone)
                 || StringUtils.isEmpty(area)
                 || StringUtils.isEmpty(detail_address))
             return;
+        AddressExample example = new AddressExample();
+        example.createCriteria().andAccountIdEqualTo(account_id);
+        List<Address> list = addressMapper.selectByExample(example);
+        if (list == null || list.size() == 0)
+            state = 1;
         address.setAccountId(account_id);
         Account account = accountService.findUserById(account_id);
         address.setAccountName(account != null ? account.getAccount() : "");
@@ -53,9 +60,7 @@ public class AddressService {
         address.setPhone(phone);
         address.setArea(area);
         address.setAddress(detail_address);
-        long create_time = System.currentTimeMillis();
-        address.setCreateTime(create_time);
-        address.setUpdateTime(create_time);
+        address.setState(state);
         int insert = addressMapper.insertSelective(address);
         if (insert != 1)
             throw new RuntimeException("添加地址失败");
@@ -74,6 +79,7 @@ public class AddressService {
         String phone = MapUtils.getString(param, "phone");
         String area = MapUtils.getString(param, "area");
         String detail_address = MapUtils.getString(param, "detail_address");
+        int state = MapUtils.getInteger(param, "state", -1);
         if (StringUtils.isEmpty(name)
                 || StringUtils.isEmpty(phone)
                 || StringUtils.isEmpty(area)
@@ -87,7 +93,19 @@ public class AddressService {
         address.setPhone(phone);
         address.setArea(area);
         address.setAddress(detail_address);
-        address.setUpdateTime(System.currentTimeMillis());
+        address.setUpdateTime(new Date());
+        if (state == 1) {
+            address.setState(state);
+            AddressExample example = new AddressExample();
+            example.createCriteria().andAccountIdEqualTo(account_id);
+            List<Address> list = addressMapper.selectByExample(example);
+            for (Address item : list) {
+                if (item.getId() != id) {
+                    item.setState(-1);
+                    addressMapper.updateByPrimaryKeySelective(item);
+                }
+            }
+        }
         int update = addressMapper.updateByPrimaryKeySelective(address);
         if (update != 1)
             throw new RuntimeException("更新地址失败");

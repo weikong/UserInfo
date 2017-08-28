@@ -67,6 +67,9 @@
         <table tableName="Product" domainObjectName="Product">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="verification_code" domainObjectName="VerificationCode">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 
 </generatorConfiguration>
