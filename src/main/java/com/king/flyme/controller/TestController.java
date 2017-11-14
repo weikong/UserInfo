@@ -64,5 +64,16 @@ public class TestController extends AbsController {
         }
     }
 
-
+    @GetMapping("/log_in")
+    public String login(@RequestParam Map param) {
+        try {
+            return accountService.login(param);
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            return "RuntimeException";
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "Exception";
+        }
+    }
 }

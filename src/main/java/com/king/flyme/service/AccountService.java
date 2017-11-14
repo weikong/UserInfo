@@ -88,4 +88,14 @@ public class AccountService {
         if (insert != 1)
             throw new RuntimeException("账号插入失败");
     }
+
+    public String login(Map param) {
+        String loginName = MapUtils.getString(param, "name");
+        String password = MapUtils.getString(param, "pwd");
+        Account account = findUserByAccount(loginName);
+        String pwd = account.getPassword();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        boolean isLogin = passwordEncoder.matches(password, pwd);
+        return "OK : " + password + " == " + pwd;
+    }
 }
